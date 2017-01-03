@@ -75,4 +75,19 @@ object Bootstrap extends App {
   val j1: io.circe.Json = convert2json("hello world")
   println(s" j1= ${j1}")
 
+  import scala.concurrent._
+  import scala.concurrent.ExecutionContext.Implicits.global
+  import scala.concurrent.duration._
+  import Factorial._
+
+  val res =
+    Await.result(Future.sequence(Vector(
+      Future(fw(3)),
+      Future(fw(4)),
+      Future(fw(5))
+    )), Duration.Inf)
+
+  val resW = res.map(_.run)
+  res.foreach(x ⇒
+    println(s" iteration=${x.value} -> ${x.written}"))
 }
